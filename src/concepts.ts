@@ -154,13 +154,6 @@ export const CONCEPTS: Record<string, ConceptInfo> = {
       "Classification of numbers (odd/even, multiples, prime vs. composite, square numbers, factors)."
   },
 
-  number_sequences: {
-    label: "Number Sequences",
-    counting: "Numbers in a sequence and the step from one term to the next.",
-    structure:
-    "Number sequences can be grouped by a shared counting rule, such as counting on by 1, 2, 5, or 10."
-  },
-  
   sequence_patterns: {
     label: "Sequence Patterns",
     counting: "How many and what kind of elements are in the sequence's core unit.",

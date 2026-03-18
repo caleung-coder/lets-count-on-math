@@ -42,11 +42,6 @@ function isEven(n: number): boolean {
   return n % 2 === 0
 }
 
-function isSquareNumber(n: number): boolean {
-  const root = Math.sqrt(n)
-  return Number.isInteger(root)
-}
-
 function allPrime(values: number[]): boolean {
   return values.every(isPrime)
 }
@@ -248,8 +243,15 @@ function generateSquareNumberQuestion(difficulty: Difficulty): Question {
   return buildQuestion([...family.matching, intruder], intruder, explanation, difficulty)
 }
 
+type OddEvenFamily = {
+  matching: number[]
+  intruders: number[]
+  matchingLabel: "odd" | "even"
+  intruderLabel: "odd" | "even"
+}
+
 function generateOddEvenQuestion(difficulty: Difficulty): Question {
-  const families = [
+  const families: OddEvenFamily[] = [
     {
       matching: [3, 5, 7],
       intruders: [2, 4, 6, 8],
@@ -268,10 +270,10 @@ function generateOddEvenQuestion(difficulty: Difficulty): Question {
       matchingLabel: "even",
       intruderLabel: "odd"
     }
-  ] as const
+  ]
 
-  const family = chooseOne(families)
-  const intruder = chooseOne(family.intruders)
+  const family = chooseOne<OddEvenFamily>(families)
+  const intruder = chooseOne<number>(family.intruders)
 
   const explanation =
     `${family.matching[0]}, ${family.matching[1]}, and ${family.matching[2]} are ${family.matchingLabel} numbers.   ${intruder} is ${family.intruderLabel}.`

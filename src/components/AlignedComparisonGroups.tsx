@@ -1,5 +1,3 @@
-import React from "react"
-
 type AlignedComparisonGroupsProps = {
   topEmoji: string
   topCount: number
