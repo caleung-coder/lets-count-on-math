@@ -1,5 +1,3 @@
-import React from "react"
-
 type FractionProps = {
   numerator: number
   denominator: number
@@ -20,12 +18,13 @@ function FractionCore({
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        lineHeight: 1
+        lineHeight: 1,
+        fontSize: "0.9em",
+        minWidth: "1.4em"
       }}
     >
       <span
         style={{
-          fontSize: "0.9em",
           fontWeight: 500
         }}
       >
@@ -35,14 +34,13 @@ function FractionCore({
       <span
         style={{
           borderTop: "2px solid currentColor",
-          width: "1.25em",
+          width: "100%",
           margin: "2px 0"
         }}
       />
 
       <span
         style={{
-          fontSize: "0.9em",
           fontWeight: 500
         }}
       >
@@ -52,7 +50,11 @@ function FractionCore({
   )
 }
 
-export default function Fraction({ numerator, denominator, whole }: FractionProps) {
+export default function Fraction({
+  numerator,
+  denominator,
+  whole
+}: FractionProps) {
   if (whole === undefined) {
     return <FractionCore numerator={numerator} denominator={denominator} />
   }
@@ -62,12 +64,12 @@ export default function Fraction({ numerator, denominator, whole }: FractionProp
       style={{
         display: "inline-flex",
         alignItems: "center",
-        gap: "6px"
+        gap: "4px"
       }}
     >
       <span
         style={{
-          fontSize: "1.5em",
+          fontSize: "1.4em",
           fontWeight: 500,
           lineHeight: 1
         }}

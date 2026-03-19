@@ -1,5 +1,3 @@
-import React from "react"
-
 type Shape =
   | "triangle"
   | "square"
@@ -13,11 +11,10 @@ interface Props {
 }
 
 export default function PatternBlock({ shape, side = 28 }: Props) {
-
   const stroke = "#222"
   const strokeWidth = 0.7
 
-  const h = Math.sqrt(3) / 2 * side
+  const h = (Math.sqrt(3) / 2) * side
 
   const colors: Record<Shape, string> = {
     triangle: "#43A047",
@@ -30,7 +27,6 @@ export default function PatternBlock({ shape, side = 28 }: Props) {
   const fill = colors[shape]
 
   if (shape === "triangle") {
-
     const width = side
     const height = h
 
@@ -42,7 +38,7 @@ export default function PatternBlock({ shape, side = 28 }: Props) {
         preserveAspectRatio="xMidYMid meet"
       >
         <polygon
-          points={`${width/2},0 ${width},${height} 0,${height}`}
+          points={`${width / 2},0 ${width},${height} 0,${height}`}
           fill={fill}
           stroke={stroke}
           strokeWidth={strokeWidth}
@@ -54,7 +50,6 @@ export default function PatternBlock({ shape, side = 28 }: Props) {
   }
 
   if (shape === "rhombus") {
-
     const width = side * 2
     const height = h
 
@@ -66,7 +61,7 @@ export default function PatternBlock({ shape, side = 28 }: Props) {
         preserveAspectRatio="xMidYMid meet"
       >
         <polygon
-          points={`0,${height/2} ${side},0 ${width},${height/2} ${side},${height}`}
+          points={`0,${height / 2} ${side},0 ${width},${height / 2} ${side},${height}`}
           fill={fill}
           stroke={stroke}
           strokeWidth={strokeWidth}
@@ -78,7 +73,6 @@ export default function PatternBlock({ shape, side = 28 }: Props) {
   }
 
   if (shape === "trapezoid") {
-
     const width = side * 2
     const height = h
 
@@ -90,7 +84,7 @@ export default function PatternBlock({ shape, side = 28 }: Props) {
         preserveAspectRatio="xMidYMid meet"
       >
         <polygon
-          points={`${side/2},0 ${side*1.5},0 ${width},${height} 0,${height}`}
+          points={`${side / 2},0 ${side * 1.5},0 ${width},${height} 0,${height}`}
           fill={fill}
           stroke={stroke}
           strokeWidth={strokeWidth}
@@ -102,7 +96,6 @@ export default function PatternBlock({ shape, side = 28 }: Props) {
   }
 
   if (shape === "hexagon") {
-
     const width = side * 2
     const height = Math.sqrt(3) * side
 
@@ -115,12 +108,12 @@ export default function PatternBlock({ shape, side = 28 }: Props) {
       >
         <polygon
           points={`
-            ${side/2},0
-            ${side*1.5},0
-            ${width},${height/2}
-            ${side*1.5},${height}
-            ${side/2},${height}
-            0,${height/2}
+            ${side / 2},0
+            ${side * 1.5},0
+            ${width},${height / 2}
+            ${side * 1.5},${height}
+            ${side / 2},${height}
+            0,${height / 2}
           `}
           fill={fill}
           stroke={stroke}
@@ -133,7 +126,6 @@ export default function PatternBlock({ shape, side = 28 }: Props) {
   }
 
   if (shape === "square") {
-
     const size = side * 0.9
 
     return (

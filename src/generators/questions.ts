@@ -173,26 +173,26 @@ function generateHowManyAreCategoryQuestion(): Question {
 function allowedTemplatesForGrade(grade: GradeSelection): TemplateKey[] {
   if (grade === "K") {
     return [
-      "data_probability_classification", // 1
-      "ten_frame_quantity",              // 2
-      "counting_objects",                // 3
-      "ordinal_position",                // 4
-      "which_group_has_more",            // 5
-      "visual_pattern_recognition",      // 6
-      "scattered_counting_objects",      // 7
-      "probability_likelihood",          // 8
-      "ways_to_make_5",                  // 9
-      "more_fewer_objects",              // 10
-      "geometry_classification",         // 11
-      "counting_objects_total",          // 12
-      "pattern_block_counting",          // 13
-      "ways_to_make_10",                 // 14
-      "measurement_classification",      // 15
-      "which_group_has_most_rows",       // 16
-      "how_many_more_fewer_objects",     // 17
-      "sequence_patterns",               // 18
-      "visual_pattern_next",             // 19
-      "how_many_are_category"            // 20
+      "data_probability_classification",
+      "ten_frame_quantity",
+      "counting_objects",
+      "ordinal_position",
+      "which_group_has_more",
+      "visual_pattern_recognition",
+      "scattered_counting_objects",
+      "probability_likelihood",
+      "ways_to_make_5",
+      "more_fewer_objects",
+      "geometry_classification",
+      "counting_objects_total",
+      "pattern_block_counting",
+      "ways_to_make_10",
+      "measurement_classification",
+      "which_group_has_most_rows",
+      "how_many_more_fewer_objects",
+      "sequence_patterns",
+      "visual_pattern_next",
+      "how_many_are_category"
     ]
   }
 
@@ -418,7 +418,7 @@ function generateQuestionByTemplate(
       return generateDataProbabilityClassificationQuestion(difficulty)
 
     case "probability_likelihood":
-      return generateProbabilityLikelihoodQuestion(difficulty)
+      return generateProbabilityLikelihoodQuestion()
 
     case "sequence_patterns":
       return generateSequencePatternsQuestion(difficulty)
