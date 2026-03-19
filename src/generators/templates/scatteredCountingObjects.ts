@@ -5,41 +5,46 @@ const CONCEPT = "scattered_counting_objects"
 const TEMPLATE_KEY = "scattered_counting_objects"
 
 type ObjectSet = {
-  targetLabelPlural: string
-  targetLabelSingular: string
-  targetEmoji: string
-  distractorLabelPlural: string
-  distractorEmoji: string
+  firstLabelPlural: string
+  firstLabelSingular: string
+  firstEmoji: string
+  secondLabelPlural: string
+  secondLabelSingular: string
+  secondEmoji: string
 }
 
 const OBJECT_SETS: ObjectSet[] = [
   {
-    targetLabelPlural: "cats",
-    targetLabelSingular: "cat",
-    targetEmoji: "🐱",
-    distractorLabelPlural: "dogs",
-    distractorEmoji: "🐶"
+    firstLabelPlural: "cats",
+    firstLabelSingular: "cat",
+    firstEmoji: "🐱",
+    secondLabelPlural: "dogs",
+    secondLabelSingular: "dog",
+    secondEmoji: "🐶"
   },
   {
-    targetLabelPlural: "shirts",
-    targetLabelSingular: "shirt",
-    targetEmoji: "👕",
-    distractorLabelPlural: "hats",
-    distractorEmoji: "🧢"
+    firstLabelPlural: "shirts",
+    firstLabelSingular: "shirt",
+    firstEmoji: "👕",
+    secondLabelPlural: "hats",
+    secondLabelSingular: "hat",
+    secondEmoji: "🧢"
   },
   {
-    targetLabelPlural: "pizza slices",
-    targetLabelSingular: "pizza slice",
-    targetEmoji: "🍕",
-    distractorLabelPlural: "apples",
-    distractorEmoji: "🍎"
+    firstLabelPlural: "pizza slices",
+    firstLabelSingular: "pizza slice",
+    firstEmoji: "🍕",
+    secondLabelPlural: "apples",
+    secondLabelSingular: "apple",
+    secondEmoji: "🍎"
   },
   {
-    targetLabelPlural: "soccer balls",
-    targetLabelSingular: "soccer ball",
-    targetEmoji: "⚽",
-    distractorLabelPlural: "basketballs",
-    distractorEmoji: "🏀"
+    firstLabelPlural: "soccer balls",
+    firstLabelSingular: "soccer ball",
+    firstEmoji: "⚽",
+    secondLabelPlural: "basketballs",
+    secondLabelSingular: "basketball",
+    secondEmoji: "🏀"
   }
 ]
 
@@ -141,19 +146,20 @@ function explanationFor(
 }
 
 function buildScatteredItems(
-  targetEmoji: string,
-  targetCount: number,
-  distractorEmoji: string,
-  distractorCount: number
+  firstEmoji: string,
+  firstCount: number,
+  secondEmoji: string,
+  secondCount: number,
+  targetEmoji: string
 ) {
   const items: Array<{ emoji: string; isTarget: boolean }> = []
 
-  for (let i = 0; i < targetCount; i += 1) {
-    items.push({ emoji: targetEmoji, isTarget: true })
+  for (let i = 0; i < firstCount; i += 1) {
+    items.push({ emoji: firstEmoji, isTarget: firstEmoji === targetEmoji })
   }
 
-  for (let i = 0; i < distractorCount; i += 1) {
-    items.push({ emoji: distractorEmoji, isTarget: false })
+  for (let i = 0; i < secondCount; i += 1) {
+    items.push({ emoji: secondEmoji, isTarget: secondEmoji === targetEmoji })
   }
 
   const shuffledItems = shuffle(items)
@@ -191,31 +197,47 @@ export function generateScatteredCountingObjectsQuestion(
 ): Question {
   const objectSet = chooseOne(OBJECT_SETS)
 
-  const maxTarget =
+  const maxFirst =
     difficulty === 1 ? 5 :
     difficulty === 2 ? 6 :
     difficulty === 3 ? 7 :
     8
 
-  const maxDistractor =
+  const maxSecond =
     difficulty === 1 ? 4 :
     difficulty === 2 ? 5 :
     difficulty === 3 ? 6 :
     7
 
-  const targetCount = Math.floor(Math.random() * maxTarget) + 1
-  const distractorCount = Math.floor(Math.random() * maxDistractor) + 1
+  const firstCount = Math.floor(Math.random() * maxFirst) + 1
+  const secondCount = Math.floor(Math.random() * maxSecond) + 1
+
+  const askForFirst = Math.random() < 0.5
+
+  const targetLabelPlural = askForFirst
+    ? objectSet.firstLabelPlural
+    : objectSet.secondLabelPlural
+
+  const targetLabelSingular = askForFirst
+    ? objectSet.firstLabelSingular
+    : objectSet.secondLabelSingular
+
+  const targetEmoji = askForFirst
+    ? objectSet.firstEmoji
+    : objectSet.secondEmoji
+
+  const targetCount = askForFirst ? firstCount : secondCount
 
   const options = buildSortedChoices(targetCount, 10)
   const correctIndex = options.findIndex(option => Number(option) === targetCount)
 
   return {
-    prompt: `How many ${objectSet.targetLabelPlural}?`,
+    prompt: `How many ${targetLabelPlural}?`,
     options,
     correctIndex,
     explanation: explanationFor(
-      objectSet.targetLabelSingular,
-      objectSet.targetLabelPlural,
+      targetLabelSingular,
+      targetLabelPlural,
       targetCount
     ),
     concept: CONCEPT,
@@ -226,10 +248,11 @@ export function generateScatteredCountingObjectsQuestion(
     visual: {
       type: "scattered_counting",
       items: buildScatteredItems(
-        objectSet.targetEmoji,
-        targetCount,
-        objectSet.distractorEmoji,
-        distractorCount
+        objectSet.firstEmoji,
+        firstCount,
+        objectSet.secondEmoji,
+        secondCount,
+        targetEmoji
       ),
       width: 260,
       height: 160
