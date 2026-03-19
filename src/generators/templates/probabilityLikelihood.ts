@@ -1,4 +1,4 @@
-import type { Difficulty, Question } from "../../types"
+import type { Question } from "../../types"
 import { chooseOne, shuffle } from "../utils"
 
 const CONCEPT = "probability_likelihood"
@@ -37,8 +37,7 @@ function buildMostLikelyQuestion(): Question {
   const correctIndex = shuffledOptions.findIndex(o => o === likely.emoji)
 
   return {
-    prompt:
-`These emoji toys are in a bag and you cannot see them.
+    prompt: `These emoji toys are in a bag and you cannot see them.
 
 Which one are you most LIKELY to pick?`,
     options: shuffledOptions,
@@ -71,8 +70,7 @@ function buildUnlikelyQuestion(): Question {
   const correctIndex = shuffledOptions.findIndex(o => o === rare.emoji)
 
   return {
-    prompt:
-`These emoji toys are in a bag and you cannot see them.
+    prompt: `These emoji toys are in a bag and you cannot see them.
 
 Which one are you UNLIKELY to pick?`,
     options: shuffledOptions,
@@ -101,11 +99,10 @@ function buildImpossibleQuestion(): Question {
     ...buildTenFrameItems(second, 5)
   ])
 
-  const options = ["Impossible", "Maybe", "Likely", "Certain"]
+  const options = ["Impossible", "Unlikely", "Likely", "Certain"]
 
   return {
-    prompt:
-`These emoji toys are in a bag and you cannot see them.
+    prompt: `These emoji toys are in a bag and you cannot see them.
 
 What is the chance of picking a ${missing.name}?`,
     options,
@@ -127,16 +124,15 @@ function buildAlwaysQuestion(): Question {
   const animal = chooseOne(ANIMALS)
   const items = buildTenFrameItems(animal, 10)
 
-  const options = ["Impossible", "Maybe", "Likely", "Certain"]
+  const options = ["Impossible", "Unlikely", "Likely", "Certain"]
 
   return {
-    prompt:
-`These emoji toys are in a bag and you cannot see them.
+    prompt: `These emoji toys are in a bag and you cannot see them.
 
 What is the chance of picking a ${animal.name}?`,
     options,
     correctIndex: 3,
-    explanation: `All of the emoji toys are ${animal.name}s. Picking a ${animal.name} will always happen.`,
+    explanation: `All of the emoji toys are ${animal.name}s. Picking a ${animal.name} is certain. That means it will always happen.`,
     concept: CONCEPT,
     difficulty: 1,
     templateKey: TEMPLATE_KEY,
@@ -149,9 +145,7 @@ What is the chance of picking a ${animal.name}?`,
   } as Question
 }
 
-export function generateProbabilityLikelihoodQuestion(
-  difficulty: Difficulty
-): Question {
+export function generateProbabilityLikelihoodQuestion(): Question {
   const builders = [
     buildMostLikelyQuestion,
     buildUnlikelyQuestion,

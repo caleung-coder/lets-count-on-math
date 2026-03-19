@@ -75,9 +75,7 @@ function sequenceLengthForDifficulty(difficulty: Difficulty): number {
 }
 
 function findDifferentPattern(
-  commonStep: number,
   commonLabel: string,
-  distractorStep: number,
   distractorLabel: string
 ): string {
   return `Three sequences show ${commonLabel}. One sequence shows ${distractorLabel}.`
@@ -125,9 +123,7 @@ export function generateSequencePatternsQuestion(
     options,
     correctIndex,
     explanation: findDifferentPattern(
-      commonPattern.step,
       commonPattern.label,
-      distractorPattern.step,
       distractorPattern.label
     ),
     concept: CONCEPT,
