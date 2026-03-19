@@ -98,9 +98,9 @@ function buildItems(pair: Pair, countA: number, countB: number): string[] {
 
 function generateCompareQuestion(pair: Pair): Question {
   const scenarios: CompareScenario[] = [
+    { kind: "compare", countA: 9, countB: 1 },
     { kind: "compare", countA: 8, countB: 2 },
     { kind: "compare", countA: 7, countB: 3 },
-    { kind: "compare", countA: 6, countB: 4 },
     { kind: "compare", countA: 5, countB: 5 }
   ]
 
@@ -135,8 +135,8 @@ function generateWordQuestion(pair: Pair): Question {
   const scenarios: WordScenario[] = [
     { kind: "word", countA: 10, countB: 0, askFor: "a" },
     { kind: "word", countA: 10, countB: 0, askFor: "b" },
-    { kind: "word", countA: 8, countB: 2, askFor: "a" },
-    { kind: "word", countA: 8, countB: 2, askFor: "b" }
+    { kind: "word", countA: 9, countB: 1, askFor: "a" },
+    { kind: "word", countA: 9, countB: 1, askFor: "b" }
   ]
 
   const scenario = randomItem(scenarios)
@@ -156,7 +156,7 @@ function generateWordQuestion(pair: Pair): Question {
 
   if (targetCount === 10) correct = "certain"
   else if (targetCount === 0) correct = "impossible"
-  else if (targetCount >= 6) correct = "likely"
+  else if (targetCount >= 8) correct = "likely"
   else correct = "unlikely"
 
   const options = ["certain", "likely", "unlikely", "impossible"]
