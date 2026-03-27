@@ -15,6 +15,8 @@ import TenFrame from "./components/TenFrame"
 import DicePattern from "./components/DicePattern"
 import AlignedComparisonGroups from "./components/AlignedComparisonGroups"
 
+console.log("APP FILE TEST")
+
 const APP_GRADE = "K"
 
 type ConceptStats = Record<
@@ -1257,17 +1259,18 @@ export default function App() {
       </button>
 
       <div style={{ width: "min(940px, 96vw)", textAlign: "center" }}>
-        <h1 style={{ margin: 0 }}>
-          Let&apos;s Count On Math
-          <sup style={{ fontSize: "0.35em", verticalAlign: "super", marginLeft: 2 }}>
-            TM
-          </sup>
-        </h1>
-
+<img
+  src="/logohorizontal.svg"
+  alt="Let's Count On Math"
+  style={{
+    width: "min(550px, 90vw)",
+    marginBottom: 2
+  }}
+/>
         <div
           style={{
             marginTop: 6,
-            marginBottom: 14,
+            marginBottom: 34,
             fontSize: 24,
             fontWeight: 600,
             color: "#4a5568"
@@ -1658,6 +1661,7 @@ export default function App() {
                           const percent = stats.seen > 0 ? Math.round((stats.correct / stats.seen) * 100) : 0
 
                           return (
+                            
                             <div key={key} style={{ marginBottom: 10 }}>
                               <div
                                 style={{
@@ -1724,52 +1728,53 @@ export default function App() {
               </button>
             )}
 
-            <div style={{ marginTop: 18 }}>
-              {mode === "practice" ? (
-                <>
-                  <button
-                    onClick={nextPracticeQuestion}
-                    disabled={!canAdvancePractice}
-                    style={{
-                      padding: "10px 20px",
-                      fontSize: 18,
-                      marginRight: 10,
-                      borderRadius: 12,
-                      cursor: canAdvancePractice ? "pointer" : "not-allowed",
-                      opacity: canAdvancePractice ? 1 : 0.5
-                    }}
-                  >
-                    Next Practice →
-                  </button>
+<div style={{ marginTop: 18 }}>
+  {mode === "practice" ? (
+    <>
+      <button
+        onClick={nextPracticeQuestion}
+        disabled={!canAdvancePractice}
+        style={{
+          padding: "10px 20px",
+          fontSize: 18,
+          marginRight: 10,
+          borderRadius: 12,
+          cursor: canAdvancePractice ? "pointer" : "not-allowed",
+          opacity: canAdvancePractice ? 1 : 0.5
+        }}
+      >
+        Next Practice →
+      </button>
 
-                  <button
-                    onClick={() => {
-                      setMode("game")
-                      setPracticeTemplate(null)
-                      setPracticeQuestion(null)
-                      resetPracticeUI()
-                    }}
-                    style={{ padding: "10px 20px", fontSize: 18, borderRadius: 12 }}
-                  >
-                    Back to the game
-                  </button>
-                </>
-              ) : (
-                <button
-                  onClick={nextGameQuestion}
-                  disabled={!canAdvanceGame}
-                  style={{
-                    padding: "10px 20px",
-                    fontSize: 18,
-                    borderRadius: 12,
-                    cursor: canAdvanceGame ? "pointer" : "not-allowed",
-                    opacity: canAdvanceGame ? 1 : 0.5
-                  }}
-                >
-                  Next Question →
-                </button>
-              )}
-            </div>
+      <button
+        onClick={() => {
+          setMode("game")
+          setPracticeTemplate(null)
+          setPracticeQuestion(null)
+          resetPracticeUI()
+        }}
+        style={{ padding: "10px 20px", fontSize: 18, borderRadius: 12 }}
+      >
+        Back to the game
+      </button>
+    </>
+  ) : (
+    <button
+      onClick={nextGameQuestion}
+      disabled={!canAdvanceGame}
+      style={{
+        padding: "10px 20px",
+        fontSize: 18,
+        borderRadius: 12,
+        cursor: canAdvanceGame ? "pointer" : "not-allowed",
+        opacity: canAdvanceGame ? 1 : 0.5
+      }}
+    >
+      Next Question →
+    </button>
+  )}
+</div>
+
           </>
         )}
       </div>
