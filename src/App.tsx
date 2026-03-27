@@ -1264,7 +1264,7 @@ export default function App() {
   alt="Let's Count On Math"
   style={{
     width: "min(550px, 90vw)",
-    marginBottom: 2
+    marginBottom: 0
   }}
 />
         <div
@@ -1276,7 +1276,7 @@ export default function App() {
             color: "#4a5568"
           }}
         >
-          Counting Foundations
+          Foundational Counting Skills
         </div>
 
         {teacherMode && (
