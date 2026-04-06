@@ -972,48 +972,10 @@ function renderOptionContent(question: Question | null, option: unknown, index: 
   return <MathOption option={option} />
 }
 
-
-function summarizeDashboard(conceptStats: ConceptStats) {
-  const rows = Object.entries(conceptStats)
-    .map(([key, stats]) => ({
-      key,
-      seen: stats.seen,
-      correct: stats.correct,
-      missed: stats.seen - stats.correct,
-      percent: stats.seen > 0 ? stats.correct / stats.seen : 0
-    }))
-    .filter(row => row.seen > 0)
-
-  if (rows.length === 0) {
-    return {
-      mostMissed: null,
-      strongest: null,
-      suggested: null
-    }
-  }
-
-  const mostMissed = [...rows].sort((a, b) => {
-    if (b.missed !== a.missed) return b.missed - a.missed
-    return b.seen - a.seen
-  })[0]
-
-  const strongest = [...rows].sort((a, b) => {
-    if (b.percent !== a.percent) return b.percent - a.percent
-    return b.seen - a.seen
-  })[0]
-
-  const suggested = [...rows].sort((a, b) => {
-    if (a.percent !== b.percent) return a.percent - b.percent
-    return b.seen - a.seen
-  })[0]
-
-  return { mostMissed, strongest, suggested }
-}
-
 export default function App() {
   const [mode, setMode] = useState<Mode>("game")
   const [teacherMode, setTeacherMode] = useState(false)
-  const [conceptStats, setConceptStats] = useState<ConceptStats>({})
+  const [_conceptStats, setConceptStats] = useState<ConceptStats>({})
   const [teacherJumpValue, setTeacherJumpValue] = useState("")
 
   const [questionNumber, setQuestionNumber] = useState(1)
