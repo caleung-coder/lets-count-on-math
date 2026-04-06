@@ -981,15 +981,14 @@ const canvas = await html2canvas(element)
     canvas.toBlob(async (blob: Blob | null) => {
       if (!blob) return
 
-      const file = new File([blob], "results.png", { type: "image/png" })
-
       // iPad / mobile share
-      if (navigator.share && (navigator as any).canShare?.({ files: [file] })) {
-        await navigator.share({
-          files: [file],
-          title: "Student Results"
-        })
-      } else {
+if (navigator.share) {
+  await navigator.share({
+    title: "Student Results",
+    text: "Student Results",
+    url: window.location.href
+  })
+} else {
         // fallback download (desktop)
         const url = URL.createObjectURL(blob)
         const a = document.createElement("a")
