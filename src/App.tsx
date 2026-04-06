@@ -1123,10 +1123,6 @@ function speak(text: string) {
     [conceptKey, currentQuestion?.difficulty]
   )
 
-  const dashboardRows = useMemo(() => {
-    return Object.entries(conceptStats)
-  }, [conceptStats])
-
   const dashboardSummary = useMemo(() => summarizeDashboard(conceptStats), [conceptStats])
 
   function recordConceptResult(question: Question, isCorrect: boolean) {
