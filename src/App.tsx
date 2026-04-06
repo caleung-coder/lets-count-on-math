@@ -1123,8 +1123,6 @@ function speak(text: string) {
     [conceptKey, currentQuestion?.difficulty]
   )
 
-  const dashboardSummary = useMemo(() => summarizeDashboard(conceptStats), [conceptStats])
-
   function recordConceptResult(question: Question, isCorrect: boolean) {
     if (!isCorrect) return
     const key = question.concept ?? "unknown"
