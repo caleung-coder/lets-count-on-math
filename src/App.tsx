@@ -1,6 +1,6 @@
 import { useMemo, useState, useEffect } from "react"
 import type { Mode, Question } from "./types"
-
+import html2canvas from "html2canvas"
 import {
   cloneAsReview,
   generateGameQuestion,
@@ -976,7 +976,7 @@ async function handleShareResults() {
   try {
     const element = document.body
 
-    const canvas = await (window as any).html2canvas(element)
+const canvas = await html2canvas(element)
 
     canvas.toBlob(async (blob: Blob | null) => {
       if (!blob) return
