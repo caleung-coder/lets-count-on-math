@@ -999,6 +999,10 @@ export default function App() {
   const [teacherMode, setTeacherMode] = useState(false)
   const [_conceptStats, setConceptStats] = useState<ConceptStats>({})
   const [teacherJumpValue, setTeacherJumpValue] = useState("")
+  const [sessionTimestamp] = useState(() => {
+  const now = new Date()
+  return now.toLocaleString()
+})
 
   const [questionNumber, setQuestionNumber] = useState(1)
   const [gameRoundComplete, setGameRoundComplete] = useState(false)
@@ -1419,7 +1423,7 @@ setStudentResults((prev) => [
             </button>
 <div style={{ marginTop: 20, paddingLeft: 120 }}>
   <div style={{ fontWeight: 600, marginBottom: 12 }}>
-    Student Results — {studentName || "Unknown"}
+    Student Results — {studentName || "Unknown"} — {sessionTimestamp}
   </div>
 
   {TEACHER_JUMP_OPTIONS.map((q, i) => {
