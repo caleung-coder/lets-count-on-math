@@ -974,37 +974,20 @@ function renderOptionContent(question: Question | null, option: unknown, index: 
 
 async function handleShareResults() {
   try {
-    if (navigator.share) {
-  await navigator.share({
-    title: "Student Results",
-    text: "Student Results",
-    url: window.location.href
-  })
-  return
-}
+
     const element = document.body
 
-const canvas = await html2canvas(element)
+    const canvas = await html2canvas(element)
 
     canvas.toBlob(async (blob: Blob | null) => {
       if (!blob) return
+      const url = URL.createObjectURL(blob)
+      const a = document.createElement("a")
+      a.href = url
+      a.download = "results.png"
+      a.click()
+      URL.revokeObjectURL(url)
 
-      // iPad / mobile share
-if (navigator.share) {
-  await navigator.share({
-    title: "Student Results",
-    text: "Student Results",
-    url: window.location.href
-  })
-} else {
-        // fallback download (desktop)
-        const url = URL.createObjectURL(blob)
-        const a = document.createElement("a")
-        a.href = url
-        a.download = "results.png"
-        a.click()
-        URL.revokeObjectURL(url)
-      }
     })
   } catch (err) {
     console.error("Share failed", err)
