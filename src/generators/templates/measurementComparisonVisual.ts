@@ -2,11 +2,6 @@ import type { Question } from "../../types"
 
 type PromptType = "tallest" | "shortest" | "widest" | "narrowest"
 
-type VisualChoice = {
-  scaleX: number
-  scaleY: number
-}
-
 type PromptConfig = {
   type: PromptType
   text: string
