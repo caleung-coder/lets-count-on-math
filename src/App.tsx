@@ -972,6 +972,38 @@ function renderOptionContent(question: Question | null, option: unknown, index: 
   return <MathOption option={option} />
 }
 
+async function handleShareResults() {
+  try {
+    const element = document.body
+
+    const canvas = await (window as any).html2canvas(element)
+
+    canvas.toBlob(async (blob: Blob | null) => {
+      if (!blob) return
+
+      const file = new File([blob], "results.png", { type: "image/png" })
+
+      // iPad / mobile share
+      if (navigator.share && (navigator as any).canShare?.({ files: [file] })) {
+        await navigator.share({
+          files: [file],
+          title: "Student Results"
+        })
+      } else {
+        // fallback download (desktop)
+        const url = URL.createObjectURL(blob)
+        const a = document.createElement("a")
+        a.href = url
+        a.download = "results.png"
+        a.click()
+        URL.revokeObjectURL(url)
+      }
+    })
+  } catch (err) {
+    console.error("Share failed", err)
+  }
+}
+
 export default function App() {
   const [mode, setMode] = useState<Mode>("game")
   const [teacherMode, setTeacherMode] = useState(false)
@@ -1444,6 +1476,21 @@ return (
 </div>
 <div style={{ marginTop: 10, fontSize: 12, color: "#666" }}>
 Key: G = Game &nbsp;&nbsp; P = Practice &nbsp;&nbsp; (# correct / # clicks) &nbsp;&nbsp; • &nbsp;&nbsp; Each question allows up to 2 clicks</div>
+<button
+  onClick={handleShareResults}
+  style={{
+    marginTop: 20,
+    padding: "14px 20px",
+    fontSize: 18,
+    borderRadius: 12,
+    cursor: "pointer",
+    backgroundColor: "#1976D2",
+    color: "white",
+    border: "none"
+  }}
+>
+  📤 Share Results
+</button>
             {teacherMode && (
               <div style={{ marginTop: 18 }}>
                 <div
