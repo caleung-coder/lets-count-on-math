@@ -67,6 +67,12 @@ export const CONCEPTS: Record<string, ConceptInfo> = {
     structure:
       "Units can be grouped by the type of measurement they describe, such as length, mass, capacity, or time."
   },
+  measurement_comparison_visual: {
+    label: "Measurement Comparison",
+    counting: "Height or width of objects.",
+    structure:
+      "Objects can be compared and ordered based on a measurable property such as height or width."
+  },
   data_probability_classification: {
     label: "Data and Probability Classification",
     counting: "Ways to describe chance.",

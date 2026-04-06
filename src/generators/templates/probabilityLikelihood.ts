@@ -115,7 +115,7 @@ function generateCompareQuestion(pair: Pair): Question {
 
   return {
     prompt: `These emoji toys are in a bag. You cannot see inside.
-Which is more likely?`,
+Which one are you more likely to draw?`,
     options,
     correctIndex,
     explanation: buildCompareExplanation(scenario.countA, scenario.countB, pair),

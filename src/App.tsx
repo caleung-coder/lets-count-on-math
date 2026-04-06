@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react"
+import { useMemo, useState, useEffect } from "react"
 import type { Mode, Question } from "./types"
 
 import {
@@ -34,26 +34,26 @@ type TeacherJumpOption = {
 }
 
 const TEACHER_JUMP_OPTIONS: TeacherJumpOption[] = [
-  { label: "1. Which One Doesn't Belong?", templateKey: "data_probability_classification", difficulty: 1 },
-  { label: "2. Ten Frame – How Many?", templateKey: "ten_frame_quantity", difficulty: 1 },
-  { label: "3. Count the Objects (Dice pattern)", templateKey: "counting_objects", difficulty: 1 },
-  { label: "4. Position in a Line (1st, 2nd, 3rd)", templateKey: "ordinal_position", difficulty: 1 },
-  { label: "5. Which Group Has More?", templateKey: "which_group_has_more", difficulty: 1 },
-  { label: "6. Pattern – Which Is the Same?", templateKey: "visual_pattern_recognition", difficulty: 1 },
-  { label: "7. Count Scattered Objects", templateKey: "scattered_counting_objects", difficulty: 1 },
-  { label: "8. Probability – Likely / Unlikely / Impossible / Always", templateKey: "probability_likelihood", difficulty: 1 },
-  { label: "9. Which Pair Does NOT Make 5", templateKey: "ways_to_make_5", difficulty: 1 },
-  { label: "10. Compare Groups – Which group has less?", templateKey: "more_fewer_objects", difficulty: 1 },
-  { label: "11. Geometry – Which One Doesn't Belong?", templateKey: "geometry_classification", difficulty: 1 },
-  { label: "12. Count Them All Together", templateKey: "counting_objects_total", difficulty: 1 },
-  { label: "13. Pattern Blocks – How Many?", templateKey: "pattern_block_counting", difficulty: 1 },
-  { label: "14. Which Pair Does NOT Make 10?", templateKey: "ways_to_make_10", difficulty: 1 },
-  { label: "15. Measurement Units – Which One Doesn't Belong?", templateKey: "measurement_classification", difficulty: 1 },
-  { label: "16. Which Group Has the Most?", templateKey: "which_group_has_most_rows", difficulty: 1 },
-  { label: "17. How Many More? Subtraction difference.", templateKey: "how_many_more_fewer_objects", difficulty: 1 },
-  { label: "18. Compare Number Patterns", templateKey: "sequence_patterns", difficulty: 1 },
-  { label: "19. Pattern – What Comes Next?", templateKey: "visual_pattern_next", difficulty: 1 },
-  { label: "20. Count by Category", templateKey: "how_many_are_category", difficulty: 1 }
+  { label: "1. Which does not belong? (core classification)", templateKey: "data_probability_classification", difficulty: 1 },
+  { label: "2. How many? (Ten Frame)", templateKey: "ten_frame_quantity", difficulty: 1 },
+  { label: "3. How many? (dice face)", templateKey: "counting_objects", difficulty: 1 },
+  { label: "4. What position is A? (first, second, third, fourth)", templateKey: "ordinal_position", difficulty: 1 },
+  { label: "5. Which group has more?", templateKey: "which_group_has_more", difficulty: 1 },
+  { label: "6. Which pattern is the same? (pattern blocks)", templateKey: "visual_pattern_recognition", difficulty: 1 },
+  { label: "7. How many “blank”? (from two different item types)", templateKey: "scattered_counting_objects", difficulty: 1 },
+  { label: "8. Probability prediction language (certain, unlikely, likely, impossible)", templateKey: "probability_likelihood", difficulty: 1 },
+  { label: "9. Which pair does not make 5?", templateKey: "ways_to_make_5", difficulty: 1 },
+  { label: "10. Which group has less?", templateKey: "more_fewer_objects", difficulty: 1 },
+  { label: "11. Which does not belong? (geometry classification)", templateKey: "geometry_classification", difficulty: 1 },
+  { label: "12. How many items altogether (total of 2 different item types)", templateKey: "counting_objects_total", difficulty: 1 },
+  { label: "13. How many? (pattern block shapes)", templateKey: "pattern_block_counting", difficulty: 1 },
+  { label: "14. Which pair does not make 10?", templateKey: "ways_to_make_10", difficulty: 1 },
+  { label: "15. Dimensional language (widest, narrowest, tallest, shortest)", templateKey: "measurement_comparison_visual", difficulty: 1 },
+  { label: "16. Which group has the most?", templateKey: "which_group_has_most_rows", difficulty: 1 },
+  { label: "17. How many more A than B? (difference between groups)", templateKey: "how_many_more_fewer_objects", difficulty: 1 },
+  { label: "18. Which does not belong? (number sequences comparison)", templateKey: "sequence_patterns", difficulty: 1 },
+  { label: "19. What comes next? (pattern sequence prediction)", templateKey: "visual_pattern_next", difficulty: 1 },
+  { label: "20. How many are A? (categorizing, then counting like items)", templateKey: "how_many_are_category", difficulty: 1 }
 ]
 
 function articleFor(wordRaw: string): "a" | "an" {
@@ -118,6 +118,7 @@ function polishExplanation(raw: string | undefined | null): string {
 function generateHardCappedGameQuestion(questionNumber: number): Question {
   return generateGameQuestion(questionNumber, APP_GRADE as any)
 }
+
 
 function safeCountsForScore(question: Question): boolean {
   return question.countsForScore !== false
@@ -663,7 +664,41 @@ function renderComparisonRowsVisual(visual: any) {
     </div>
   )
 }
+function renderComparisonRowsVisualGrid(visual: any) {
+  if (!visual?.groups) return null
 
+  return (
+    <div
+      style={{
+        display: "grid",
+        gridTemplateColumns: "repeat(2, auto)",
+        gap: 20,
+        justifyContent: "center",
+        alignItems: "center",
+        marginTop: 12,
+        marginBottom: 12,
+        fontSize: 42
+      }}
+    >
+      {visual.groups.map((g: any, i: number) => (
+        <div
+          key={i}
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            minWidth: 120,
+            minHeight: 60
+          }}
+        >
+          {Array.from({ length: g.count }).map((_, j) => (
+            <span key={j}>{g.emoji} </span>
+          ))}
+        </div>
+      ))}
+    </div>
+  )
+}
 function renderPatternStrip(items: string[], compact = false, withBlank = false) {
   const side = compact ? 16 : 22
   const blankSize = compact ? 24 : 32
@@ -819,10 +854,14 @@ function renderReferenceVisual(question: Question | null, answered: boolean) {
     )
   }
 
-  if (visual?.type === "comparison_rows") {
-    return renderComparisonRowsVisual(visual)
+if (visual?.type === "comparison_rows") {
+  // ONLY use grid for "most" question
+  if (question?.templateKey === "which_group_has_most_rows") {
+    return renderComparisonRowsVisualGrid(visual)
   }
 
+  return renderComparisonRowsVisual(visual)
+}
   if (visual?.type === "ten_frame") {
     return (
       <div style={{ display: "flex", justifyContent: "center", marginTop: 10, marginBottom: 6 }}>
@@ -903,6 +942,19 @@ function renderOptionContent(question: Question | null, option: unknown, index: 
 
   if (Array.isArray(visualChoices)) {
     const visual = visualChoices[index]
+
+    if (visual?.scaleX && visual?.scaleY) {
+      return (
+        <span
+          style={{
+            display: "inline-block",
+            transform: `scale(${visual.scaleX}, ${visual.scaleY})`
+          }}
+        >
+          {String(option)}
+        </span>
+      )
+    }
 
     if (visual?.type === "pattern_strip" && Array.isArray(visual.items)) {
       return renderPatternStrip(visual.items, true, false)
@@ -996,13 +1048,59 @@ export default function App() {
     sessionsStarted: 0,
     questionsAnswered: 0
   })
+  const [studentName, setStudentName] = useState(() => {
+    return localStorage.getItem("studentName") || ""
+  })
+  useEffect(() => {
+    localStorage.setItem("studentName", studentName)
+  }, [studentName])
+useEffect(() => {
+  setStudentResults([])
+}, [studentName])
+  const [studentResults, setStudentResults] = useState<any[]>(() => {
+  const saved = localStorage.getItem("studentResults")
+  return saved ? JSON.parse(saved) : []
+})
 
+useEffect(() => {
+  localStorage.setItem("studentResults", JSON.stringify(studentResults))
+}, [studentResults])
+
+function speak(text: string) {
+  if (!("speechSynthesis" in window)) return
+
+  const synth = window.speechSynthesis
+
+  // IMPORTANT: wait for voices to be ready
+  const loadAndSpeak = () => {
+    const voices = synth.getVoices()
+
+    const samantha = voices.find(v => v.name === "Samantha")
+
+    const utterance = new SpeechSynthesisUtterance(text)
+
+    if (samantha) {
+      utterance.voice = samantha
+    }
+
+    utterance.rate = 0.5
+
+    synth.cancel()
+    synth.speak(utterance)
+  }
+
+  // If voices already loaded → speak immediately
+  if (synth.getVoices().length > 0) {
+    loadAndSpeak()
+  } else {
+    // Otherwise wait for them
+    synth.onvoiceschanged = loadAndSpeak
+  }
+}
   const currentQuestion = mode === "game" ? gameQuestion : practiceQuestion ?? gameQuestion
   const options = useMemo(() => currentQuestion?.options ?? [], [currentQuestion])
-  const promptLines = useMemo(
-    () => (currentQuestion?.prompt ?? "Loading...").split("\n"),
-    [currentQuestion?.prompt]
-  )
+  const promptText = currentQuestion?.prompt ?? "Loading..."
+  
   const benchmarkInstruction = benchmarkInstructionFor(currentQuestion)
 
   const selected = mode === "game" ? gameSelected : practiceSelected
@@ -1035,6 +1133,7 @@ export default function App() {
   const dashboardSummary = useMemo(() => summarizeDashboard(conceptStats), [conceptStats])
 
   function recordConceptResult(question: Question, isCorrect: boolean) {
+    if (!isCorrect) return
     const key = question.concept ?? "unknown"
     setConceptStats(prev => {
       const current = prev[key] ?? { seen: 0, correct: 0 }
@@ -1047,6 +1146,7 @@ export default function App() {
       }
     })
   }
+
 
   function resetGameUI() {
     setGameSelected(null)
@@ -1167,32 +1267,46 @@ export default function App() {
     setSel(index)
 
     const isCorrect = index === currentQuestion.correctIndex
-
+// ✅ ALWAYS log the click (game + practice)
+setStudentResults((prev) => [
+  ...prev,
+  {
+    name: studentName || "Unknown",
+    questionNumber: questionNumber,
+    concept: currentQuestion?.templateKey ?? "unknown",
+    correct: isCorrect,
+    attempts: 1,
+    mode: mode === "game" ? "game" : "practice",
+    source: mode, 
+    timestamp: Date.now()
+  }
+])
     if (isCorrect) {
       setAns(true)
       recordConceptResult(currentQuestion, true)
 
       if (mode === "game" && safeCountsForScore(currentQuestion)) {
-        setScore(prev => (prev < 20 ? prev + 1 : prev))
-        setTotal(prev => (prev < 20 ? prev + 1 : prev))
-      } else if (mode === "practice") {
-        setPracticeStats(prev => ({ ...prev, questionsAnswered: prev.questionsAnswered + 1 }))
-      }
+  setScore(prev => (prev < 20 ? prev + 1 : prev))
 
-      return
+
+  setTotal(prev => (prev < 20 ? prev + 1 : prev))
+} else if (mode === "practice") {
+  // do nothing (handled by click logging above)
+}  return
     }
 
     if (newAttempts === 2) {
       setAns(true)
       recordConceptResult(currentQuestion, false)
 
+
       if (mode === "game" && safeCountsForScore(currentQuestion)) {
         setTotal(prev => (prev < 20 ? prev + 1 : prev))
         setReviewQueue(prev => [...prev, cloneAsReview(currentQuestion)])
-      } else if (mode === "practice") {
-        setPracticeStats(prev => ({ ...prev, questionsAnswered: prev.questionsAnswered + 1 }))
+} else if (mode === "practice") {
+  // do nothing (handled by click logging above)
+}
       }
-    }
   }
 
   function buttonBg(index: number) {
@@ -1278,7 +1392,20 @@ export default function App() {
         >
           Foundational Counting Skills
         </div>
-
+<div style={{ marginTop: 10 }}>
+  <input
+    value={studentName}
+    onChange={(e) => setStudentName(e.target.value)}
+    placeholder="Enter student name"
+    style={{
+      padding: "8px 12px",
+      fontSize: 16,
+      borderRadius: 8,
+      border: "1px solid #ccc",
+      textAlign: "center"
+    }}
+  />
+</div>
         {teacherMode && (
           <div style={{ marginBottom: 14 }}>
             <label style={{ fontSize: 14, fontWeight: 600, marginRight: 8 }}>
@@ -1303,7 +1430,8 @@ export default function App() {
               ))}
             </select>
           </div>
-        )}
+
+)}
 
         {gameRoundComplete ? (
           <div style={{ marginTop: 24 }}>
@@ -1314,7 +1442,55 @@ export default function App() {
             >
               Start New Round
             </button>
+<div style={{ marginTop: 20, paddingLeft: 120 }}>
+  <div style={{ fontWeight: 600, marginBottom: 12 }}>
+    Student Results — {studentName || "Unknown"}
+  </div>
 
+  {TEACHER_JUMP_OPTIONS.map((q, i) => {
+const results = studentResults.filter(
+  r =>
+    r.name === (studentName || "Unknown") &&
+    (
+      (r.mode === "game" && r.questionNumber === i + 1) ||
+      (r.mode === "practice" && r.concept === q.templateKey)
+    )
+)
+// Separate Game vs Practice
+const gameResults = results.filter(r => r.mode === "game")
+const practiceResults = results.filter(r => r.mode === "practice")
+
+// Game stats
+const gameCorrect = gameResults.filter(r => r.correct).length
+const gameClicks = gameResults.length
+
+// Practice stats
+const practiceCorrect = practiceResults.filter(r => r.correct).length
+const practiceClicks = practiceResults.length
+return (
+<div
+  key={i}
+  style={{
+    display: "grid",
+    gridTemplateColumns: "160px 1fr",
+    alignItems: "start",
+    justifyItems: "start",
+    fontSize: 14,
+    marginBottom: 6
+  }}
+>
+<span style={{ fontFamily: "monospace" }}>
+  G: {gameCorrect}/{gameClicks} &nbsp; P: {practiceCorrect}/{practiceClicks}
+</span>
+<span>
+  {q.label}
+</span>
+      </div>
+    )
+  })}
+</div>
+<div style={{ marginTop: 10, fontSize: 12, color: "#666" }}>
+Key: G = Game &nbsp;&nbsp; P = Practice &nbsp;&nbsp; (# correct / # clicks) &nbsp;&nbsp; • &nbsp;&nbsp; Each question allows up to 2 clicks</div>
             {teacherMode && (
               <div style={{ marginTop: 18 }}>
                 <div
@@ -1334,79 +1510,6 @@ export default function App() {
                     Round score: {score} / {total}
                   </p>
 
-                  {(dashboardSummary.mostMissed || dashboardSummary.strongest || dashboardSummary.suggested) && (
-                    <div
-                      style={{
-                        marginTop: 12,
-                        padding: 10,
-                        borderRadius: 10,
-                        background: "#ffffff",
-                        border: "1px solid #e3e3e3"
-                      }}
-                    >
-                      {dashboardSummary.mostMissed && (
-                        <p style={{ fontSize: 13, color: "#666", margin: 0 }}>
-                          Most missed concept: {getConceptInfo(dashboardSummary.mostMissed.key).label}
-                        </p>
-                      )}
-                      {dashboardSummary.strongest && (
-                        <p style={{ fontSize: 13, color: "#666", margin: "6px 0 0 0" }}>
-                          Strongest concept: {getConceptInfo(dashboardSummary.strongest.key).label}
-                        </p>
-                      )}
-                      {dashboardSummary.suggested && (
-                        <p style={{ fontSize: 13, color: "#666", margin: "6px 0 0 0" }}>
-                          Suggested next practice: {getConceptInfo(dashboardSummary.suggested.key).label}
-                        </p>
-                      )}
-                    </div>
-                  )}
-
-                  {dashboardRows.length > 0 && (
-                    <div style={{ marginTop: 12 }}>
-                      {dashboardRows.map(([key, stats]) => {
-                        const percent = stats.seen > 0 ? Math.round((stats.correct / stats.seen) * 100) : 0
-
-                        return (
-                          <div key={key} style={{ marginBottom: 10 }}>
-                            <div
-                              style={{
-                                display: "flex",
-                                justifyContent: "space-between",
-                                gap: 10,
-                                fontSize: 12,
-                                color: "#666",
-                                marginBottom: 4
-                              }}
-                            >
-                              <span>{getConceptInfo(key).label}</span>
-                              <span>
-                                {stats.correct}/{stats.seen} • {percent}%
-                              </span>
-                            </div>
-
-                            <div
-                              style={{
-                                width: "100%",
-                                height: 10,
-                                background: "#e6e6e6",
-                                borderRadius: 999
-                              }}
-                            >
-                              <div
-                                style={{
-                                  width: barWidth(percent),
-                                  height: "100%",
-                                  borderRadius: 999,
-                                  background: percent >= 80 ? "#81C784" : percent >= 60 ? "#FFD54F" : "#E57373"
-                                }}
-                              />
-                            </div>
-                          </div>
-                        )
-                      })}
-                    </div>
-                  )}
                 </div>
               </div>
             )}
@@ -1415,21 +1518,37 @@ export default function App() {
           <>
             {renderReferenceVisual(currentQuestion, answered)}
 
-            <p
-              style={{
-                marginTop: 10,
-                fontSize: 22,
-                fontFamily: "Comic Sans MS, Comic Sans, Arial",
-                minHeight: 32
-              }}
-            >
-              {promptLines.map((line, i) => (
-                <span key={i}>
-                  {line}
-                  {i < promptLines.length - 1 && <br />}
-                </span>
-              ))}
-            </p>
+<div
+  style={{
+    marginTop: 10,
+    fontSize: 22,
+    fontFamily: "Comic Sans MS, Comic Sans, Arial",
+    minHeight: 32,
+    display: "flex",
+    justifyContent: "center",
+    width: "100%",
+    maxWidth: 700,
+    margin: "10px auto",
+    alignItems: "center",
+    gap: 30
+  }}
+>
+<span>{promptText.replace(/\n/g, " ")}</span>
+
+  <button
+    onClick={() =>
+      speak((currentQuestion?.prompt ?? "").replace(/\n/g, ". "))
+    }
+    style={{
+      fontSize: 18,
+      borderRadius: 8,
+      cursor: "pointer",
+      padding: "4px 8px"
+    }}
+  >
+    🔊
+  </button>
+</div>
 
             <p style={{ marginTop: 0, opacity: 0.8 }}>
               {mode === "game" ? (
@@ -1603,33 +1722,6 @@ export default function App() {
                     Developmental stage: Difficulty {currentQuestion?.difficulty ?? 1} — {developmentalStage}
                   </p>
 
-                  {(dashboardSummary.mostMissed || dashboardSummary.strongest || dashboardSummary.suggested) && (
-                    <div
-                      style={{
-                        marginTop: 10,
-                        padding: 10,
-                        borderRadius: 10,
-                        background: "#ffffff",
-                        border: "1px solid #e3e3e3"
-                      }}
-                    >
-                      {dashboardSummary.mostMissed && (
-                        <p style={{ fontSize: 13, color: "#666", margin: 0 }}>
-                          Most missed concept: {getConceptInfo(dashboardSummary.mostMissed.key).label}
-                        </p>
-                      )}
-                      {dashboardSummary.strongest && (
-                        <p style={{ fontSize: 13, color: "#666", margin: "6px 0 0 0" }}>
-                          Strongest concept: {getConceptInfo(dashboardSummary.strongest.key).label}
-                        </p>
-                      )}
-                      {dashboardSummary.suggested && (
-                        <p style={{ fontSize: 13, color: "#666", margin: "6px 0 0 0" }}>
-                          Suggested next practice: {getConceptInfo(dashboardSummary.suggested.key).label}
-                        </p>
-                      )}
-                    </div>
-                  )}
 
                   {answered && explanationLines.length > 0 && (
                     <div style={{ marginTop: 6 }}>
@@ -1642,66 +1734,6 @@ export default function App() {
                     </div>
                   )}
 
-                  {dashboardRows.length > 0 && (
-                    <div style={{ marginTop: 12 }}>
-                      <p style={{ fontSize: 13, color: "#666", margin: 0 }}>
-                        Teacher Dashboard
-                      </p>
-
-                      <div
-                        style={{
-                          marginTop: 6,
-                          border: "1px solid #ccc",
-                          borderRadius: 10,
-                          padding: 10,
-                          background: "#fafafa"
-                        }}
-                      >
-                        {dashboardRows.map(([key, stats]) => {
-                          const percent = stats.seen > 0 ? Math.round((stats.correct / stats.seen) * 100) : 0
-
-                          return (
-                            
-                            <div key={key} style={{ marginBottom: 10 }}>
-                              <div
-                                style={{
-                                  display: "flex",
-                                  justifyContent: "space-between",
-                                  gap: 10,
-                                  fontSize: 12,
-                                  color: "#666",
-                                  marginBottom: 4
-                                }}
-                              >
-                                <span>{getConceptInfo(key).label}</span>
-                                <span>
-                                  {stats.correct}/{stats.seen} • {percent}%
-                                </span>
-                              </div>
-
-                              <div
-                                style={{
-                                  width: "100%",
-                                  height: 10,
-                                  background: "#e6e6e6",
-                                  borderRadius: 999
-                                }}
-                              >
-                                <div
-                                  style={{
-                                    width: barWidth(percent),
-                                    height: "100%",
-                                    borderRadius: 999,
-                                    background: percent >= 80 ? "#81C784" : percent >= 60 ? "#FFD54F" : "#E57373"
-                                  }}
-                                />
-                              </div>
-                            </div>
-                          )
-                        })}
-                      </div>
-                    </div>
-                  )}
                 </div>
               )}
             </div>

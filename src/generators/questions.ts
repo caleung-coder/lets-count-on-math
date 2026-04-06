@@ -5,7 +5,7 @@ import { generateCountingObjectsTotalQuestion } from "./templates/countingObject
 import { generateDataProbabilityClassificationQuestion } from "./templates/dataProbabilityClassification"
 import { generateGeometryClassificationQuestion } from "./templates/geometryClassification"
 import { generateHowManyMoreFewerObjectsQuestion } from "./templates/howManyMoreFewerObjects"
-import { generateMeasurementClassificationQuestion } from "./templates/measurementClassification"
+import { generateMeasurementComparisonVisualQuestion } from "./templates/measurementComparisonVisual"
 import { generateMoreFewerObjectsQuestion } from "./templates/moreFewerObjects"
 import { generateOrdinalPositionQuestion } from "./templates/ordinalPosition"
 import { generatePatternBlockCountingQuestion } from "./templates/patternBlockCounting"
@@ -26,7 +26,7 @@ export type GradeSelection = "K" | "1" | "2"
 type TemplateKey =
   | "additive_equivalence"
   | "geometry_classification"
-  | "measurement_classification"
+  | "measurement_comparison_visual"
   | "data_probability_classification"
   | "probability_likelihood"
   | "sequence_patterns"
@@ -187,7 +187,7 @@ function allowedTemplatesForGrade(grade: GradeSelection): TemplateKey[] {
       "counting_objects_total",
       "pattern_block_counting",
       "ways_to_make_10",
-      "measurement_classification",
+      "measurement_comparison_visual",
       "which_group_has_most_rows",
       "how_many_more_fewer_objects",
       "sequence_patterns",
@@ -214,7 +214,7 @@ function allowedTemplatesForGrade(grade: GradeSelection): TemplateKey[] {
       "data_probability_classification",
       "sequence_patterns",
       "additive_equivalence",
-      "measurement_classification",
+      "measurement_comparison_visual",
       "how_many_more_fewer_objects",
       "visual_pattern_next",
       "how_many_are_category"
@@ -239,7 +239,7 @@ function allowedTemplatesForGrade(grade: GradeSelection): TemplateKey[] {
     "data_probability_classification",
     "sequence_patterns",
     "additive_equivalence",
-    "measurement_classification",
+    "measurement_comparison_visual",
     "visual_pattern_next",
     "how_many_are_category"
   ]
@@ -300,8 +300,8 @@ function normalizeTemplateKey(value: string): TemplateKey {
       return "additive_equivalence"
     case "geometry_classification":
       return "geometry_classification"
-    case "measurement_classification":
-      return "measurement_classification"
+    case "measurement_comparison_visual":
+      return "measurement_comparison_visual"
     case "data_probability_classification":
       return "data_probability_classification"
     case "probability_likelihood":
@@ -411,9 +411,9 @@ function generateQuestionByTemplate(
     case "geometry_classification":
       return generateGeometryClassificationQuestion(difficulty)
 
-    case "measurement_classification":
-      return generateMeasurementClassificationQuestion(difficulty)
-
+    case "measurement_comparison_visual":
+      return generateMeasurementComparisonVisualQuestion()
+      
     case "data_probability_classification":
       return generateDataProbabilityClassificationQuestion(difficulty)
 
