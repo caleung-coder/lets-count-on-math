@@ -974,6 +974,14 @@ function renderOptionContent(question: Question | null, option: unknown, index: 
 
 async function handleShareResults() {
   try {
+    if (navigator.share) {
+  await navigator.share({
+    title: "Student Results",
+    text: "Student Results",
+    url: window.location.href
+  })
+  return
+}
     const element = document.body
 
 const canvas = await html2canvas(element)
