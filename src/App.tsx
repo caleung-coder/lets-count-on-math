@@ -972,9 +972,6 @@ function renderOptionContent(question: Question | null, option: unknown, index: 
   return <MathOption option={option} />
 }
 
-function barWidth(percent: number) {
-  return `${Math.max(8, percent)}%`
-}
 
 function summarizeDashboard(conceptStats: ConceptStats) {
   const rows = Object.entries(conceptStats)
