@@ -972,7 +972,7 @@ function renderOptionContent(question: Question | null, option: unknown, index: 
   return <MathOption option={option} />
 }
 
-async function handleShareResults() {
+async function handleShareResults(studentName: string) {
   try {
 
     const element = document.body
@@ -984,7 +984,9 @@ async function handleShareResults() {
       const url = URL.createObjectURL(blob)
       const a = document.createElement("a")
       a.href = url
-      a.download = "results.png"
+      const safeName = (studentName || "Student").replace(/\s+/g, "_")
+      const timestamp = new Date().toISOString().slice(0,16).replace("T","_").replace(":","-")
+      a.download = `${safeName}_${timestamp}.png`
       a.click()
       URL.revokeObjectURL(url)
 
@@ -1471,7 +1473,7 @@ return (
 <div style={{ marginTop: 10, fontSize: 12, color: "#666" }}>
 Key: G = Game &nbsp;&nbsp; P = Practice &nbsp;&nbsp; (# correct / # clicks) &nbsp;&nbsp; • &nbsp;&nbsp; Each question allows up to 2 clicks</div>
 <button
-  onClick={handleShareResults}
+  onClick={() => handleShareResults(studentName)}
   style={{
     marginTop: 20,
     padding: "14px 20px",
