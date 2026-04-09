@@ -1801,6 +1801,20 @@ Key: G = Game &nbsp;&nbsp; P = Practice &nbsp;&nbsp; (# correct / # clicks) &nbs
       Next Question →
     </button>
   )}
+  <div style={{ marginTop: 30, textAlign: "center", display: "none" }}>
+  <button
+    style={{
+      padding: "10px 16px",
+      fontSize: 16,
+      borderRadius: 8,
+      border: "none",
+      background: "#888",
+      color: "white"
+    }}
+  >
+    🏠 Home
+  </button>
+</div>
 </div>
 
           </>
