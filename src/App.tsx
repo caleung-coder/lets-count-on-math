@@ -1354,14 +1354,24 @@ setStudentResults((prev) => [
       </button>
 
       <div style={{ width: "min(940px, 96vw)", textAlign: "center" }}>
-<img
-  src="/logohorizontal.svg"
-  alt="Let's Count On Math"
-  style={{
-    width: "min(550px, 90vw)",
-    marginBottom: 0
-  }}
-/>
+
+<a
+  href="https://letscountonmath.com"
+  target="_blank"
+  rel="noopener noreferrer"
+  title="Visit Let's Count On Math website"
+  style={{ display: "inline-block" }}
+>
+  <img
+    src="/logohorizontal.svg"
+    alt="Let's Count On Math"
+    style={{
+      width: "min(550px, 90vw)",
+      marginBottom: 0
+    }}
+  />
+</a>
+
         <div
           style={{
             marginTop: 6,
